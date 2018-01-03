@@ -1,4 +1,4 @@
-obj/UTR.o: UTR.c VirtualSerial/VirtualSerial.h \
+obj/USB.o: USB.c VirtualSerial/VirtualSerial.h \
  VirtualSerial/Descriptors.h LUFA/Drivers/USB/USB.h \
  LUFA/Drivers/USB/../../Common/Common.h \
  LUFA/Drivers/USB/../../Common/Architectures.h \
@@ -86,7 +86,7 @@ obj/UTR.o: UTR.c VirtualSerial/VirtualSerial.h \
  LUFA/Drivers/USB/Class/Device/../Common/CDCClassCommon.h \
  LUFA/Drivers/USB/Class/StillImageClass.h LUFA/Drivers/Board/LEDs.h \
  LUFA/Drivers/Board/../../Common/Common.h LUFA/Drivers/Board/Joystick.h \
- LUFA/Platform/Platform.h LUFA/Platform/../Common/Common.h
+ LUFA/Platform/Platform.h LUFA/Platform/../Common/Common.h USB.h
 
 VirtualSerial/VirtualSerial.h:
 
@@ -283,3 +283,5 @@ LUFA/Drivers/Board/Joystick.h:
 LUFA/Platform/Platform.h:
 
 LUFA/Platform/../Common/Common.h:
+
+USB.h:
