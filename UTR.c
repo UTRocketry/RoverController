@@ -146,7 +146,8 @@ bool initRaido(unsigned char freq) {
 	7 - Tx Tail
 	8 - Rx PLL Settings
 	9 - Rx Antenna Selection
-	12 - Rx Preamble 1	13 - Rx Preamble 2
+	12 - Rx Preamble 1
+	13 - Rx Preamble 2
 	14 - Rx Preamble 3
 	15 - RX
 	*/
@@ -188,11 +189,11 @@ int main(void){
 	CDC_Device_CreateStream(&VirtualSerial_CDC_Interface, &USBSerialStream); //Init USB stream
 	GlobalInterruptEnable();
 	SPI_MasterInit(); // Turns AVR device into SPI Master
-	initRaido(0);//NEEDS freq 
+	//initRaido(0);//NEEDS freq 
 	//END OF INIT CODE
 
 	_delay_ms(1000);
-	sendSerial(initRadio());
+	sendSerial(initRaido(0));
 	while(true){
 		char rec = SPI_RW_8(0x028, 0b00000000);
 		//fputs(rec, &USBSerialStream);
