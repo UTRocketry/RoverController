@@ -158,7 +158,7 @@ int main(void){
 	SPI_MasterInit(); // Turns AVR device into SPI Master
 	//initRaido(0);//NEEDS freq 
 	//END OF INIT CODE
-
+    
 	_delay_ms(1000);
 	sendSerial(initRaido(0));
 	while(true){
