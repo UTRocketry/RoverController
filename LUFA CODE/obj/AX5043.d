@@ -1,4 +1,4 @@
-obj/AX5043.o: AX5043.c VirtualSerial/VirtualSerial.h \
+obj/AX5043.o: AX5043.c AX5043.h VirtualSerial/VirtualSerial.h \
  VirtualSerial/Descriptors.h LUFA/Drivers/USB/USB.h \
  LUFA/Drivers/USB/../../Common/Common.h \
  LUFA/Drivers/USB/../../Common/Architectures.h \
@@ -86,7 +86,9 @@ obj/AX5043.o: AX5043.c VirtualSerial/VirtualSerial.h \
  LUFA/Drivers/USB/Class/Device/../Common/CDCClassCommon.h \
  LUFA/Drivers/USB/Class/StillImageClass.h LUFA/Drivers/Board/LEDs.h \
  LUFA/Drivers/Board/../../Common/Common.h LUFA/Drivers/Board/Joystick.h \
- LUFA/Platform/Platform.h LUFA/Platform/../Common/Common.h AX5043.h
+ LUFA/Platform/Platform.h LUFA/Platform/../Common/Common.h
+
+AX5043.h:
 
 VirtualSerial/VirtualSerial.h:
 
@@ -283,5 +285,3 @@ LUFA/Drivers/Board/Joystick.h:
 LUFA/Platform/Platform.h:
 
 LUFA/Platform/../Common/Common.h:
-
-AX5043.h:
