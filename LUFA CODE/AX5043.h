@@ -495,7 +495,7 @@
 /* Function Prototypes: */
 int ax5043_power_up(void);
 int ax_bootup(void);
-
+bool ax_check_comms(void);
 
 
 struct reg_pair {
