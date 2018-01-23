@@ -1,6 +1,8 @@
 #pragma once
 #include <stdint.h>
-#include <avr/bool.h>
+#include "VirtualSerial/VirtualSerial.h"
+#include <avr/eeprom.h>
+#include <avr/interrupt.h>
 #define AX_REG_SILICONREVISION 		0x000 	/* Silicon Revision */        
 #define AX_REG_SCRATCH 			0x001 	/* Scratch */         
 #define AX_REG_PWRMODE 			0x002 	/* Power Mode */        
@@ -375,7 +377,7 @@
 
 
 #define AX_REG_FEC_FECEN_MASK 			(1<<0) /* Enable FEC*/ 
-
+#define AX_REG_SILICONREVISION_DEFAULT      (0x51)
 #define AX_REG_RADIOSTATE_IDLE_MASK 		(0x00)
 #define AX_REG_RADIOSTATE_POWER_DOWN_MASK 	(0x01)
 #define AX_REG_RADIOSTATE_TX_PLL_MASK 		(0x04)
@@ -495,110 +497,5 @@
 /* Function Prototypes: */
 int ax5043_power_up(void);
 int ax_bootup(void);
-bool ax_check_comms(void);
+int ax_check_comms(void);
 
-
-struct reg_pair {
-	uint16_t address;
-	uint8_t  data;
-};
-typedef struct reg_pair reg_pair;
-struct ax_settings { /* Register setting struct */
-	reg_pair MODULATION;
-	reg_pair ENCODING;
-	reg_pair FRAMING;
-	reg_pair PINFUNCSYSCLK;
-	reg_pair PINFUNCANTSEL;
-	reg_pair PINFUNCPWRAMP;
-	reg_pair WAKEUPXOEARLY;
-	reg_pair IFFREQ1;
-	reg_pair IFFREQ0;
-	reg_pair DECIMATION;
-	reg_pair RXDATARATE2;
-	reg_pair RXDATARATE1;
-	reg_pair RXDATARATE0;
-	reg_pair MAXDROFFSET2;
-	reg_pair MAXDROFFSET1;
-	reg_pair MAXDROFFSET0;
-	reg_pair MAXRFOFFSET2;
-	reg_pair MAXRFOFFSET1;
-	reg_pair MAXRFOFFSET0;
-	reg_pair FSKDMAX1;
-	reg_pair FSKDMAX0;
-	reg_pair FSKDMIN1;
-	reg_pair FSKDMIN0;
-	reg_pair AMPLFILTER;
-	reg_pair RXPARAMSETS;
-	reg_pair AGCGAIN0;
-	reg_pair AGCTARGET0;
-	reg_pair TIMEGAIN0;
-	reg_pair DRGAIN0;
-	reg_pair PHASEGAIN0;
-	reg_pair FREQUENCYGAINA0;
-	reg_pair FREQUENCYGAINB0;
-	reg_pair FREQUENCYGAINC0;
-	reg_pair FREQUENCYGAIND0;
-	reg_pair AMPLITUDEGAIN0;
-	reg_pair FREQDEV10;
-	reg_pair FREQDEV00;
-	reg_pair BBOFFSRES0;
-	reg_pair AGCGAIN1;
-	reg_pair AGCTARGET1;
-	reg_pair AGCAHYST1;
-	reg_pair AGCMINMAX1;
-	reg_pair TIMEGAIN1;
-	reg_pair DRGAIN1;
-	reg_pair PHASEGAIN1;
-	reg_pair FREQUENCYGAINA1;
-	reg_pair FREQUENCYGAINB1;
-	reg_pair FREQUENCYGAINC1;
-};
-struct ax_settings ax_reg_settings = {
-	.MODULATION = { .address = AX_REG_MODULATION,.data = 0x08 },
-	.ENCODING = { .address = AX_REG_ENCODING,.data = 0x00 },
-	.FRAMING = { .address = AX_REG_FRAMING,.data = 0x14 },
-	.PINFUNCANTSEL = { .address = AX_REG_PINFUNCANTSEL,.data = 0x05 },
-	.PINFUNCPWRAMP = { .address = AX_REG_PINFUNCPWRAMP,.data = 0x00 },
-	.WAKEUPXOEARLY = { .address = AX_REG_WAKEUPXOEARLY,.data = 0x01 },
-	.IFFREQ1 = { .address = AX_REG_IFFREQ1,.data = 0x00 },
-	.IFFREQ0 = { .address = AX_REG_IFFREQ0,.data = 0x89 },
-	.DECIMATION = { .address = AX_REG_DECIMATION,.data = 0x7F },
-	.RXDATARATE2 = { .address = AX_REG_RXDATARATE2,.data = 0x00 },
-	.RXDATARATE1 = { .address = AX_REG_RXDATARATE1,.data = 0x4E },
-	.RXDATARATE0 = { .address = AX_REG_RXDATARATE0,.data = 0xBD },
-	.MAXDROFFSET2 = { .address = AX_REG_MAXDROFFSET2,.data = 0x00 },
-	.MAXDROFFSET1 = { .address = AX_REG_MAXDROFFSET1,.data = 0x00 },
-	.MAXDROFFSET0 = { .address = AX_REG_MAXDROFFSET0,.data = 0x00 },
-	.MAXRFOFFSET2 = { .address = AX_REG_MAXRFOFFSET2,.data = 0x80 },
-	.MAXRFOFFSET1 = { .address = AX_REG_MAXRFOFFSET1,.data = 0x00 },
-	.MAXRFOFFSET0 = { .address = AX_REG_MAXRFOFFSET0,.data = 0x66 },
-	.FSKDMAX1 = { .address = AX_REG_FSKDMAX1,.data = 0x00 },
-	.FSKDMAX0 = { .address = AX_REG_FSKDMAX0,.data = 0xA6 },
-	.FSKDMIN1 = { .address = AX_REG_FSKDMIN1,.data = 0xFF },
-	.FSKDMIN0 = { .address = AX_REG_FSKDMIN0,.data = 0x5A },
-	.AMPLFILTER = { .address = AX_REG_AMPLFILTER,.data = 0x00 },
-	.RXPARAMSETS = { .address = AX_REG_RXPARAMSETS,.data = 0xF4 },
-	.AGCGAIN0 = { .address = AX_REG_AGCGAIN0,.data = 0xE8 },
-	.AGCTARGET0 = { .address = AX_REG_AGCTARGET0,.data = 0x84 },
-	.TIMEGAIN0 = { .address = AX_REG_TIMEGAIN0,.data = 0x99 },
-	.DRGAIN0 = { .address = AX_REG_DRGAIN0,.data = 0x93 },
-	.PHASEGAIN0 = { .address = AX_REG_PHASEGAIN0,.data = 0x83 },
-	.FREQUENCYGAINA0 = { .address = AX_REG_FREQUENCYGAINA0,.data = 0x0F },
-	.FREQUENCYGAINB0 = { .address = AX_REG_FREQUENCYGAINB0,.data = 0x1F },
-	.FREQUENCYGAINC0 = { .address = AX_REG_FREQUENCYGAINC0,.data = 0x0B },
-	.FREQUENCYGAIND0 = { .address = AX_REG_FREQUENCYGAIND0,.data = 0x0B },
-	.AMPLITUDEGAIN0 = { .address = AX_REG_AMPLITUDEGAIN0,.data = 0x06 },
-	.FREQDEV10 = { .address = AX_REG_FREQDEV10,.data = 0x00 },
-	.FREQDEV00 = { .address = AX_REG_FREQDEV00,.data = 0x00 },
-	.BBOFFSRES0 = { .address = AX_REG_BBOFFSRES0,.data = 0x00 },
-	.AGCGAIN1 = { .address = AX_REG_AGCGAIN1,.data = 0xE8 },
-	.AGCTARGET1 = { .address = AX_REG_AGCTARGET1,.data = 0x84 },
-	.AGCAHYST1 = { .address = AX_REG_AGCAHYST1,.data = 0x00 },
-	.AGCMINMAX1 = { .address = AX_REG_AGCMINMAX1,.data = 0x00 },
-	.TIMEGAIN1 = { .address = AX_REG_TIMEGAIN1,.data = 0x97 },
-	.DRGAIN1 = { .address = AX_REG_DRGAIN1,.data = 0x92 },
-	.PHASEGAIN1 = { .address = AX_REG_PHASEGAIN1,.data = 0x83 },
-	.FREQUENCYGAINA1 = { .address = AX_REG_FREQUENCYGAINA1,.data = 0x0F },
-	.FREQUENCYGAINB1 = { .address = AX_REG_FREQUENCYGAINB1,.data = 0x1F },
-	.FREQUENCYGAINC1 = { .address = AX_REG_FREQUENCYGAINC1,.data = 0x0B },
-};

@@ -1,4 +1,4 @@
-#include "ax5043.h"
+#include "AX5043.h"
 /* AX5043 library.
 * Should provide all initialization and control
 * functionality for the AX5043 radio IC. */
@@ -45,17 +45,17 @@ int ax_read_packet(char* rx_data, int max) {
 	* empty the fifo if max is reached. */
 }
 
-bool ax_check_comms() {
+int ax_check_comms() {
 	uint8_t stat;
-	stat = ax_rd8reg(ax_driver_s, AX_REG_SILICONREVISION);
+	stat = SPI_RW_8(AX_REG_SILICONREVISION,0,1);
 	if (stat == AX_REG_SILICONREVISION_DEFAULT) {
-		return true;
+		return 1;
 	}
 	else if (stat == 0x00 || stat == 0xFF) {
-		return false;
+		return 0;
 	}
 	else {
-		return false;
+		return 1;
 	}
 }
 int ax_bootup() {
@@ -78,18 +78,18 @@ int ax_bootup() {
 	PORTB |= (1<<DDB0); //SS high
 	_delay_ms(1);
 	while((PINB & (1 << PB4))) _delay_ms(2);
-	SPI_RW_8(AX_REG_PWRMODE,AX_REG_PWRMODE_REST_MASK,false);
+	SPI_RW_8(AX_REG_PWRMODE,AX_REG_PWRMODE_REST_MASK,0);
 	_delay_ms(3);																   /* Delay a bit here.  */
 	//ax_wr88reg(ax_driver_s, AX_REG_PWRMODE, 0);  /* UGH. Magic numbers. This basically sets the chip into powerdown, and clears the RST bit. */
-	SPI_RW_8(AX_REG_PWRMODE,AX_REG_PWRMODE_POWERDOWN_MASK,false)											 /* Delay a bit here.  */
+	SPI_RW_8(AX_REG_PWRMODE,AX_REG_PWRMODE_POWERDOWN_MASK,0);											 /* Delay a bit here.  */
 												 /* Should be able to set all the register contents here.
 												 * In power down, the register file is still up. */
 	/* In that case, it seems pretty legit.
 	* Need to set up the osc. */
-	SPI_RW_A16_R8(AX_REG_XTALOSC,0x04);
-	SPI_RW_A16_R8(AX_REG_XTALAMPL,0x00);
-	SPI_RW_A16_R8(AX_REG_XTALCAP,0);
-	SPI_RW_A16_R8(AX_REG_PWRMODE,0x0C);
+	SPI_RW_A16_R8(AX_REG_XTALOSC,0x04,0);
+	SPI_RW_A16_R8(AX_REG_XTALAMPL,0x00,0);
+	SPI_RW_A16_R8(AX_REG_XTALCAP,0,0);
+	SPI_RW_A16_R8(AX_REG_PWRMODE,0x0C,0);
 
 	//ax_wr168reg(ax_driver_s, AX_REG_XTALOSC, 0x04);  /* Magic numbers. Came from DS.  */
 	//ax_wr168reg(ax_driver_s, AX_REG_XTALAMPL, 0x00);  /* Once again, from DS. */

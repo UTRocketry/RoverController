@@ -1,6 +1,3 @@
-#include "VirtualSerial/VirtualSerial.h"
-#include <avr/eeprom.h>
-#include <avr/interrupt.h>
 #include "AX5043.h"
 
 uint8_t USBint = 0;
@@ -91,9 +88,9 @@ this function is only valid for the 8 bit registers (0x00 to 0x70)
 adding 128 to an int sets register to write instead of read
 */
 
-char SPI_RW_8(unsigned char reg_A,unsigned char reg_D, bool read){
+char SPI_RW_8(unsigned char reg_A,unsigned char reg_D, int read){
 	PORTB &= ~(1<<DDB0); //SS low
-	if(read){
+	if(read==1){
 		SPDR = reg_A;
 	}else{
 		
@@ -105,10 +102,10 @@ char SPI_RW_8(unsigned char reg_A,unsigned char reg_D, bool read){
 	PORTB |= (1<<DDB0); //SS high
 	return SPDR;
 }
-char SPI_RW_A16_R8(uint16_t reg_A,unsigned char reg_D, bool read){
+char SPI_RW_A16_R8(uint16_t reg_A,unsigned char reg_D, int read){
 	uint8_t reg_A_upper = reg_A >> 8;
 	uint8_t reg_A_lower = reg_A;
-	if(read){
+	if(read==1){
 		SPDR = reg_A_upper;
 		while(!(SPSR & (1<<SPIF)));
 		SPDR = reg_A_lower;
