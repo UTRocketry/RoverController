@@ -94,7 +94,8 @@ obj/UTR.o: UTR.c VirtualSerial/VirtualSerial.h \
  ../LUFA/../LUFA/Drivers/Board/../../Common/Common.h \
  ../LUFA/../LUFA/Drivers/Board/Joystick.h \
  ../LUFA/../LUFA/Platform/Platform.h \
- ../LUFA/../LUFA/Platform/../Common/Common.h
+ ../LUFA/../LUFA/Platform/../Common/Common.h UTR_GPS/UTR_GPS.h \
+ UTR_GPS/UTR_GPS.c
 
 VirtualSerial/VirtualSerial.h:
 
@@ -291,3 +292,7 @@ Config/LUFAConfig.h:
 ../LUFA/../LUFA/Platform/Platform.h:
 
 ../LUFA/../LUFA/Platform/../Common/Common.h:
+
+UTR_GPS/UTR_GPS.h:
+
+UTR_GPS/UTR_GPS.c:

@@ -18,15 +18,10 @@ F_CPU        = 8000000
 F_USB        = $(F_CPU)
 OPTIMIZATION = s
 TARGET       = UTR
-<<<<<<< HEAD:GPS PARSING EXAMPLE LUFA/VirtualSerial/makefile
 SRC          = $(TARGET).c VirtualSerial/Descriptors.c $(LUFA_SRC_USB) $(LUFA_SRC_USBCLASS)
 LUFA_PATH    = ../LUFA
-=======
-SRC          = $(TARGET).c VirtualSerial/Descriptors.c $(LUFA_SRC_USB) $(LUFA_SRC_USBCLASS) AX5043.c
-LUFA_PATH    = LUFA/
->>>>>>> 550ba6e4f6107c655f59aa810ee3ad48de76a38f:LUFA CODE/makefile
 CC_FLAGS     = -DUSE_LUFA_CONFIG_HEADER -IConfig/
-LD_FLAGS     = 
+LD_FLAGS     =
 
 # Default target
 all:
