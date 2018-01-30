@@ -40,31 +40,31 @@ void initServos() { //don't init until you want servos to become stiff
 	TCCR1B = (1 << CS10) | (1 << CS11); //Clk / 64 same as 8 bit ~ 30 Hz
 }
 
-void setServo(int servo, int degree){
-	int OCVal; //OC registers only take an int
+void setServo(int servo, float degree){
+	uint8_t OCVal; //OC registers only take an int
 	switch (servo){ //numbers match with schematic
 	case 1:
-		OCVal = 255 - ((1 + (degree / 180.0)) / 33.33) * 255;
+		OCVal = 255.0 - ((1.0 + (degree / 180.0)) / 33.33) * 255.0;
 		OCR1A = OCVal;
 		break;
 	case 2:
-		OCVal = 255 - ((1 + (degree / 180.0)) / 33.33) * 255;
+		OCVal = 255.0 - ((1.0 + (degree / 180.0)) / 33.33) * 255.0;
 		OCR1B = OCVal;
 		break;
 	case 3:
-		OCVal = 255 - ((1 + (degree / 180.0)) / 33.33) * 255;
+		OCVal = 255.0 - ((1.0 + (degree / 180.0)) / 33.33) * 255.0;
 		OCR0B = OCVal;
 		break;
 	case 4:
-		OCVal = 255 - ((1 + (degree / 180.0)) / 33.33) * 255;
+		OCVal = 255.0 - ((1.0 + (degree / 180.0)) / 33.33) * 255.0;
 		OCR0A = OCVal;
 		break;
 	case 5:
-		OCVal = 1 + (degree / 180.0) * 1000; //using delay_us below for better resolution
+		OCVal = 1.0 + (degree / 180.0) * 1000.0; //using delay_us below for better resolution
 		PORTB |= (1 << PB6); //set PB6 high
 		_delay_us(OCVal); //wait
 		PORTB &= ~(1 << PB6); //set PB6 low
-		_delay_ms(3 - OCVal / 1000); //3.33 ms became 3 ms to make output closer to 30 Hz
+		_delay_ms(3.0 - OCVal / 1000.0); //3.33 ms became 3 ms to make output closer to 30 Hz
 		break;
 	}
 }
@@ -73,10 +73,22 @@ int main() {
 	initServos();
 
 	while (1) {
-		setServo(1, 180);
-		setServo(2, 180);
-		setServo(3, 180);
-		setServo(4, 180);
-		setServo(5, 180);
+		int i;
+		for (i = 0; i < 180; i = i + 5){
+		setServo(1, i);
+		setServo(2, i);
+		setServo(3, i);
+		setServo(4, i);
+		//setServo(5, i);
+		_delay_ms(100);
+		}
+		for (i = 180; i > 0; i = i - 5){
+		setServo(1, i);
+		setServo(2, i);
+		setServo(3, i);
+		setServo(4, i);
+		//setServo(5, i);
+		_delay_ms(100);
+		}
 	  }
 }
