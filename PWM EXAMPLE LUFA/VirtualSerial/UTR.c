@@ -78,7 +78,7 @@ void initServos(void) { //don't init until you want servos to become stiff
 	DDRB |= (1 << DDB7) | (1 << DDB6); //B7 output, OC.0A, B6 output, bit banged PWM
 	DDRD |= (1 << DDD0); //D0 output, OC.0B
 	TCCR0A |= (1 << COM0A1) | (1 << COM0A0) | (1 << COM0B1) | (1 << COM0B0) | (1 << WGM00); //OC.0A & OC.0B set as PWM  //PWM phase correct
-	TCCR0B = (1 << CS02); //~60Hz
+	TCCR0B =  (1 << CS02);
 	//Config of 16 bit PWM
 	DDRC |= (1 << DDC6) | (1 << DDC5); //C6 output, OC.1A, C5 output OC.1B
 	TCCR1A |= (1 << COM1A1) | (1 << COM1A0) | (1 << COM1B1) | (1 << COM1B0) | (1 << WGM00); //OC.0A & OC.0B set as PWM  //PWM phase correct
@@ -100,15 +100,14 @@ void delay_us(uint16_t count) {
 //https://cdn-shop.adafruit.com/product-files/2442/FS90R-V2.0_specs.pdf
 //https://servodatabase.com/servo/towerpro/sg90
 #define servoCenter 1.5 //milliseconds
-#define servoRange 0.9 //difference from center
-#define servoPeriod 0.06 //dont know why but this works
-//period is 1 / frequency
+#define servoRange 0.6 //difference from center in ms
+#define servoPeriod 16.3 //period between pulses in ms
 
 void setServo(int servo, int speed){ //speed 0 - 10 positive or negative CW is -, CCW is +
 	float OCVal; //OC registers only take an int
 	switch (servo){ //numbers match with schematic
 	case 4:
-		OCVal = 255 - (servoCenter + servoRange * speed * 0.1) * servoPeriod * 255;
+		OCVal = 255.0 - ((servoCenter + servoRange * speed * 0.1) / servoPeriod) * 255.0;
 		OCR0A = (int) OCVal;
 		break;
 }}
@@ -117,14 +116,10 @@ int main(void){
 	clock_prescale_set(clock_div_1);
 	initServos();
 	while(true){
-		//setServo(1, 180);
-		//setServo(2, 180);
-		//setServo(3, 180);
-		setServo(4, 1);
-		//setServo(4, 135);
-		//delay_ms(2000);
-		//setServo(5, 180);
-		/*CDC_Device_ReceiveByte(&VirtualSerial_CDC_Interface);
-		CDC_Device_USBTask(&VirtualSerial_CDC_Interface);
-		USB_USBTask();*/
-}}
+		float i;
+			for (i = -10; i < 10; i ++){
+			_delay_ms(5000);
+			setServo(4, i);
+		}
+	}
+}
