@@ -356,8 +356,6 @@
 #define AX_REG_ENCODING_MANCH_MASK 		(1<<3)  /* Enable manchester encoding*/ 
 #define AX_REG_ENCODING_NOSYNC_MASK 		(1<<4)  /* Disable dibit sync in 4fsk mode*/ 
 /* To use NRZI, set inv to high, and set diff to 1*/
-
-
 #define AX_REG_FRAMING_FABORT_MASK 		(1<<0)
 #define AX_REG_FRAMING_FRMMODE_RAW_MASK		(0x00 << 1)
 #define AX_REG_FRAMING_FRMMODE_RAW_SOFT_MASK	(0x01 << 1)
@@ -365,17 +363,12 @@
 #define AX_REG_FRAMING_FRMMODE_RAW_PAT_MATCH_MASK (0x03 << 1)
 #define AX_REG_FRAMING_FRMMODE_MBUS_MASK	(0x04 << 1)
 #define AX_REG_FRAMING_FRMMODE_MBUS_4TO6_MASK	(0x05 << 1)
-
 #define AX_REG_FRAMING_CRC_OFF_MASK 		(0x00 << 4)
 #define AX_REG_FRAMING_CRC_CCITT_MASK 		(0x01 << 4)
 #define AX_REG_FRAMING_CRC_CRC16_MASK 		(0x02 << 4)
 #define AX_REG_FRAMING_CRC_DNP_MASK 		(0x03 << 4)
 #define AX_REG_FRAMING_CRC_CRC32_MASK 		(0x04 << 4)
-
 #define AX_REG_FRAMING_FRMRX_MASK 		(0x01 << 7) /* Flag set when flag is detected in HDLC mode or when preamble matches in raw pattern mode. Cleared by writting 1 to FABORT*/ 
-
-
-
 #define AX_REG_FEC_FECEN_MASK 			(1<<0) /* Enable FEC*/ 
 #define AX_REG_SILICONREVISION_DEFAULT      (0x51)
 #define AX_REG_RADIOSTATE_IDLE_MASK 		(0x00)
@@ -389,18 +382,13 @@
 #define AX_REG_RADIOSTATE_RX_PREAMBLE_1_MASK 	(0x0D)
 #define AX_REG_RADIOSTATE_RX_PREAMBLE_2_MASK 	(0x0E)
 #define AX_REG_RADIOSTATE_RX_MASK 	 	(0x0F)
-
-
 #define AX_REG_XTALSTATUS_MASK 			(0x01) /* A 1 indicates that the crystal oscilator is up and running. */ 
-
-
 #define AX_REG_PINSTATE_SYSCLK_MASK 		(1<<0)
 #define AX_REG_PINSTATE_DCLK_MASK 		(1<<1)
 #define AX_REG_PINSTATE_DATA_MASK 		(1<<2)
 #define AX_REG_PINSTATE_IRQ_MASK 		(1<<3)
 #define AX_REG_PINSTATE_ANTSEL_MASK 		(1<<4)
 #define AX_REG_PINSTATE_PWRAMP_MASK 		(1<<5)
-
 #define AX_REG_PINFUNSYSCLK_OUT_ZERO_MASK 	(0x00)
 #define AX_REG_PINFUNSYSCLK_OUT_ONE_MASK 	(0x01)
 #define AX_REG_PINFUNSYSCLK_OUT_HIGHZ_MASK 	(0x02)
@@ -418,10 +406,7 @@
 #define AX_REG_PINFUNSYSCLK_OUT_XTAL_DIV1024_MASK 	(0x0E)
 #define AX_REG_PINFUNSYSCLK_OUT_LP_OSC_MASK 		(0x0F)
 #define AX_REG_PINFUNSYSCLK_OUT_TEST_OBS_OSC_MASK 	(0x1F)
-
 #define AX_REG_PINFUNSYSCLK_PUSYCLK_MASK 	(1<<7) /* Enables the weak pullup*/ 
-
-
 #define AX_REG_PINFUNCIRQ_ZERO_MASK 		(0x00)
 #define AX_REG_PINFUNCIRQ_ONE_MASK 		(0x01)
 #define AX_REG_PINFUNCIRQ_HIGH_Z_MASK 		(0x02)
@@ -429,8 +414,6 @@
 #define AX_REG_PINFUNCIRQ_TEST_OBS_MASK 	(0x07)
 #define AX_REG_PINFUNCIRQ_PIIRQ_MASK 		(1 << 6) /* Inverts the data on the IRQ line*/ 
 #define AX_REG_PINFUNCIRQ_PUIRQ_MASK 		(1 << 7) /* Enables the weak pullup on the IRQ line*/ 
-
-
 #define AX_REG_PINFUNCANTSEL_ZERO_MASK 		(0x00) /* Outputs zero on the antenna select pin*/ 
 #define AX_REG_PINFUNCANTSEL_ONE_MASK 		(0x01)
 #define AX_REG_PINFUNCANTSEL_HIGH_Z_MASK 	(0x02)
@@ -441,16 +424,12 @@
 #define AX_REG_PINFUNCANTSEL_TEST_OBS_MASK 	(0x07)
 #define AX_REG_PINFUNCANTSEL_INV_MASK 	 	(1<<6)
 #define AX_REG_PINFUNCANTSEL_PULLUP_MASK 	(1<<7)
-
-
 #define CHUNK_HEAD_LEN_SHIFT 5
 #define CHUNK_HEAD_LEN_0 (0x0) << CHUNK_HEAD_LEN_SHIFT
 #define CHUNK_HEAD_LEN_1 (0x1) << CHUNK_HEAD_LEN_SHIFT
 #define CHUNK_HEAD_LEN_2 (0x2) << CHUNK_HEAD_LEN_SHIFT
 #define CHUNK_HEAD_LEN_3 (0x3) << CHUNK_HEAD_LEN_SHIFT
-#define CHUNK_HEAD_LEN_VAR_LEN (0x7) << CHUNK_HEAD_LEN_SHIFT
-
-/* If the length is variable, the next byte is the length, I think.*/
+#define CHUNK_HEAD_LEN_VAR_LEN (0x7) << CHUNK_HEAD_LEN_SHIFT/* If the length is variable, the next byte is the length, I think.*/
 #define CHUNK_HEAD_NOP 0x00 /* A NOP. Receiver will not send NOP. */ 
 #define CHUNK_HEAD_RSSI 0x31  /* Indicates that the next 1 byte will be RSSI.*/ 
 #define CHUNK_HEAD_TXCTRL 0x3C /* Transmit control data*/ 
@@ -479,12 +458,7 @@
 * Bit 4: ADDR fail: Set if the packet doesnt match the address check.
 * Bit 3: CRCFAIL
 * Bit 2-0: See bits 2-0 of the tx format. */
-
-
 #define CHUNK_HEAD_TXPWR 0xFD /* Allows the TX power to be changed on the fly. */ 
-
-
-
 #define PWRMODE_POWERDOWN 0x00 /* All circuits dead. Except the register. */ 
 #define PWRMODE_DEEPSLEEP 0x01 /* Now I really mean all circuits are dead. Data loss*/ 
 #define PWRMODE_STANDBY 0x05 /* Xtal OSC enabled*/ 
@@ -494,8 +468,12 @@
 #define PWRMODE_WORRX 0x0B /* Wake on radio mode*/ 
 #define PWRMODE_SYNTHTX 0x0C /* The synth is running, transmit mode*/ 
 #define PWRMODE_FULLTX 0x0D /* The transmitter is running. */ 
+#define AX5043_SS_PIN   PB1
+#define MOSI_PIN        PB3
+#define MISO_PIN        PB4
 /* Function Prototypes: */
 int ax5043_power_up(void);
 int ax_bootup(void);
 int ax_check_comms(void);
-
+int ax_send_data(void);
+char * ax_read_packet(void);

@@ -1,5 +1,5 @@
 #include "AX5043.h"
-
+#define AX_SS_PIN  PB5
 uint8_t USBint = 0;
 USB_ClassInfo_CDC_Device_t VirtualSerial_CDC_Interface = {
 	.Config =
@@ -89,7 +89,7 @@ adding 128 to an int sets register to write instead of read
 */
 
 char SPI_RW_8(unsigned char reg_A,unsigned char reg_D, int read){
-	PORTB &= ~(1<<DDB0); //SS low
+	PORTB &= ~(1<<DDB5); //SS low
 	if(read==1){
 		SPDR = reg_A;
 	}else{
@@ -99,12 +99,13 @@ char SPI_RW_8(unsigned char reg_A,unsigned char reg_D, int read){
 	while(!(SPSR & (1<<SPIF)));
 	SPDR = reg_D;
 	while(!(SPSR & (1<<SPIF)));
-	PORTB |= (1<<DDB0); //SS high
+	PORTB |= (1<<DDB5); //SS high
 	return SPDR;
 }
 char SPI_RW_A16_R8(uint16_t reg_A,unsigned char reg_D, int read){
 	uint8_t reg_A_upper = reg_A >> 8;
 	uint8_t reg_A_lower = reg_A;
+    PORTB &= ~(1<<DDB5); //SS low
 	if(read==1){
 		SPDR = reg_A_upper;
 		while(!(SPSR & (1<<SPIF)));
@@ -116,7 +117,7 @@ char SPI_RW_A16_R8(uint16_t reg_A,unsigned char reg_D, int read){
 		SPDR = reg_A_lower;
 		while(!(SPSR & (1<<SPIF)));
 	}
-
+    PORTB |= (1<<DDB5); //SS high
 	return SPDR;
 }
 ISR(TIMER0_OVF_vect) { //moved from main loop to timer .1 second / (8Mhz / 1024 prescale) = 12.8
@@ -131,25 +132,41 @@ ISR(TIMER0_OVF_vect) { //moved from main loop to timer .1 second / (8Mhz / 1024 
 	sei();
 }
 
-
+void lufaPrintInt(unsigned int c){
+    char buffer[10] = {};
+    itoa(c, buffer, 10);
+    fputs(buffer, &USBSerialStream);
+    fputs("\n", &USBSerialStream);
+}
 int main(void){
 	//INIT CODE 
 	TCCR0B |= ((1 << CS02) | (1 << CS00)); //Table 15-9 clk/1024 prescale
 	TIMSK0 |= (1 << TOIE0); //timer 0 overflow interrupt enable
-	DDRB |= (1 << PB0); //set PB0 output
-	DDRD |= (1 << DDD0); //set PD0 output
-	PORTB |= (1 << PB0); //SS high
+	DDRB |= (1 << AX_SS_PIN); //set PB0 output
+	DDRD |= (1 << DDD5); //set PD0 output
+	PORTB |= (1 << AX_SS_PIN); //SS high
 	sei(); // Set interputs 
 	SetupHardware(); //USB init 
 	CDC_Device_CreateStream(&VirtualSerial_CDC_Interface, &USBSerialStream); //Init USB stream
+    _delay_ms(3000);
+    fputs('b',&USBSerialStream);
 	GlobalInterruptEnable();
 	SPI_MasterInit(); // Turns AVR device into SPI Master
-	//initRaido(0);//NEEDS freq 
 	//END OF INIT CODE
-    ax_bootup();
+    ax_check_comms();
+    fputs('i',&USBSerialStream);
 	_delay_ms(1000);
-	while(true){
-		sendSerial(ax_check_comms());
+	
+    while(true){
+       ax_send_data();
+       fputs("Sending data \n.",&USBSerialStream);
+       //sendSerial(text);
+       //char fifofree = SPI_RW_8(AX_REG_FIFO);
+       //fputs(ax_read_packet(),&USBSerialStream);
+       //int *datai = (int) datac;
+       //for(int i =3; i<3;i++){
+        //lufaPrintInt(datai[i]);
+       //}
 		_delay_ms(1000);
 	}
 	//END IF TEST CODE 
