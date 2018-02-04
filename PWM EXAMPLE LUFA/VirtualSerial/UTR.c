@@ -106,11 +106,35 @@ void delay_us(uint16_t count) {
 void setServo(int servo, int speed){ //speed 0 - 10 positive or negative CW is -, CCW is +
 	float OCVal; //OC registers only take an int
 	switch (servo){ //numbers match with schematic
+	case 1:
+		OCVal = 255.0 - ((servoCenter + servoRange * speed * 0.1) / servoPeriod) * 255.0;
+		OCR1A = (int) OCVal;
+		break;
+	case 2:
+		OCVal = 255.0 - ((servoCenter + servoRange * speed * 0.1) / servoPeriod) * 255.0;
+		OCR1B = (int) OCVal;
+		break;
+	case 3:
+		OCVal = 255.0 - ((servoCenter + servoRange * speed * 0.1) / servoPeriod) * 255.0;
+		OCR0B = (int) OCVal;
+		break;
 	case 4:
 		OCVal = 255.0 - ((servoCenter + servoRange * speed * 0.1) / servoPeriod) * 255.0;
 		OCR0A = (int) OCVal;
 		break;
-}}
+	}
+}
+
+#define deployedPanelDegrees 90
+
+void deployPanels(){
+	OCVal = 1.0 + (deployedPanelDegrees / 180.0) * 1000.0; //using delay_us below for better resolution
+	PORTB |= (1 << PB6); //set PB6 high
+	_delay_us(OCVal); //wait
+	PORTB &= ~(1 << PB6); //set PB6 low
+	_delay_ms(3.0 - OCVal / 1000.0); //3.33 ms became 3 ms to make output closer to 30 Hz
+	break;
+}
 
 int main(void){
 	clock_prescale_set(clock_div_1);
