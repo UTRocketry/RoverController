@@ -81,10 +81,10 @@ int ax_check_comms() {
 	uint8_t stat;
 	stat = SPI_RW_8(AX_REG_SILICONREVISION,0x00,0);
 	if (stat == AX_REG_SILICONREVISION_DEFAULT) {
-		return stat;
+		return 1;
 	}
 	else if (stat == 0x00 || stat == 0xFF) {
-		return stat;
+		return 0;
 	}
 }
 uint16_t getStatus(){
@@ -106,17 +106,19 @@ uint16_t getStatus(){
 	
 }
 
-uint16_t AX_getStatusBits() {
-  int16_t data = 0;
+uint32_t AX_getStatusBits() {
+  int32_t data = 0;
   PORTB &= ~(1 << DDB5); //SS low //change this
-  SPDR = 0x00;
+  SPDR = 0x70;
   while (!(SPSR & (1 << SPIF)));
   data |= SPDR; //LSB
-  SPDR = 0x00; //shift clock
+  SPDR = 0x02; //shift clock
   while (!(SPSR & (1 << SPIF)));
   int16_t SPDRShift = SPDR;
   SPDRShift <<= 8;
   data |= SPDRShift; //MSB
+  SPDR = 0x00;
+  while(!(SPSR & (1<<SPIF)));
   PORTB |= (1 << DDB5); //SS high //change this
   return data;
 }

@@ -478,5 +478,5 @@ int ax_check_comms(void);
 int ax_send_data(void);
 int ax_send_data(void);
 char * ax_read_packet(void);
-uint16_t AX_getStatusBits(void);
+uint32_t AX_getStatusBits(void);
 char SPI_RW_A16_R8(uint16_t reg_A,unsigned char reg_D, int read);
