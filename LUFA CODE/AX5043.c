@@ -87,6 +87,39 @@ int ax_check_comms() {
 		return stat;
 	}
 }
+uint16_t getStatus(){
+	uint8_t reg_A_upper = 0x70;
+	uint8_t reg_A_lower = 0x02;
+	uint8_t reg_B_upper = 0x00;
+	uint8_t reg_B_lower = 0x00;
+    PORTB &= ~(1<<DDB5); //SS low
+	SPDR = reg_A_upper;
+	while(!(SPSR & (1<<SPIF)));
+	reg_B_upper = SPDR;
+	SPDR = reg_A_lower;
+	while(!(SPSR & (1<<SPIF)));
+	reg_B_lower = SPDR;
+	SPDR = 0xff; 
+	while(!(SPSR & (1<<SPIF)));
+    PORTB |= (1<<DDB5); //SS high
+	return (reg_B_upper);
+	
+}
+
+uint16_t AX_getStatusBits() {
+  int16_t data = 0;
+  PORTB &= ~(1 << DDB5); //SS low //change this
+  SPDR = 0x00;
+  while (!(SPSR & (1 << SPIF)));
+  data |= SPDR; //LSB
+  SPDR = 0x00; //shift clock
+  while (!(SPSR & (1 << SPIF)));
+  int16_t SPDRShift = SPDR;
+  SPDRShift <<= 8;
+  data |= SPDRShift; //MSB
+  PORTB |= (1 << DDB5); //SS high //change this
+  return data;
+}
 int ax_bootup() {
 	/* So bootstrap procedure.
 	* Need to reset the chip. Bring SEL high.

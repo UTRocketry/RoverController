@@ -117,6 +117,8 @@ char SPI_RW_A16_R8(uint16_t reg_A,unsigned char reg_D, int read){
 		SPDR = reg_A_lower;
 		while(!(SPSR & (1<<SPIF)));
 	}
+	SPDR = reg_D;
+	while(!(SPSR & (1<<SPIF)));
     PORTB |= (1<<DDB5); //SS high
 	return SPDR;
 }
@@ -137,6 +139,17 @@ void lufaPrintInt(unsigned int c){
     itoa(c, buffer, 10);
     fputs(buffer, &USBSerialStream);
     fputs("\n", &USBSerialStream);
+}
+void lufaPrintUint20_t(uint32_t c) {
+  int temp = c / 10000;
+  lufaPrintInt(temp);
+  c -= temp * 10000;
+  if (c == 0) {
+    fputs("0000", & USBSerialStream);
+  } else {
+    lufaPrintInt(c);
+  }
+  fputs("\n", & USBSerialStream);
 }
 int main(void){
 	//INIT CODE 
@@ -159,7 +172,10 @@ int main(void){
 	
     while(true){
        ax_send_data();
-       fputs("Sending data \n.",&USBSerialStream);
+	   uint16_t status = AX_getStatusBits();
+       fputs("Data: ",&USBSerialStream);
+	   lufaPrintUint20_t(status);
+	   fputs("\n",&USBSerialStream);
        //sendSerial(text);
        //char fifofree = SPI_RW_8(AX_REG_FIFO);
        //fputs(ax_read_packet(),&USBSerialStream);
