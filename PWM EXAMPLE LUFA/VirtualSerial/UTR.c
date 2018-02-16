@@ -126,14 +126,16 @@ void setServo(int servo, int speed){ //speed 0 - 10 positive or negative CW is -
 }
 
 #define deployedPanelDegrees 90
+#define solarCenter 1.5
+#define solarRange 0.9
+#define solarPeriod 20
 
-void deployPanels(){
-	OCVal = 1.0 + (deployedPanelDegrees / 180.0) * 1000.0; //using delay_us below for better resolution
+void setSolar(int degrees){
+	float pulse = (servoCenter + servoRange * (degrees / 90));
 	PORTB |= (1 << PB6); //set PB6 high
-	_delay_us(OCVal); //wait
+	delay_ms(pulse); //wait
 	PORTB &= ~(1 << PB6); //set PB6 low
-	_delay_ms(3.0 - OCVal / 1000.0); //3.33 ms became 3 ms to make output closer to 30 Hz
-	break;
+	delay_ms(solarPeriod);
 }
 
 int main(void){
@@ -141,7 +143,8 @@ int main(void){
 	initServos();
 	while(true){
 		float i;
-			for (i = -10; i < 10; i ++){
+		setSolar(0);
+		for (i = -10; i < 10; i ++){
 			_delay_ms(5000);
 			setServo(4, i);
 		}

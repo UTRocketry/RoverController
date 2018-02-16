@@ -18,8 +18,8 @@ F_CPU        = 8000000
 F_USB        = $(F_CPU)
 OPTIMIZATION = s
 TARGET       = UTR
-SRC          = $(TARGET).c VirtualSerial/Descriptors.c $(LUFA_SRC_USB) $(LUFA_SRC_USBCLASS) AX5043.c
-LUFA_PATH    = LUFA/
+SRC          = $(TARGET).c ../LUFA_LIB/VirtualSerial/Descriptors.c $(LUFA_SRC_USB) $(LUFA_SRC_USBCLASS) AX5043.c
+LUFA_PATH    = ../LUFA_LIB/LUFA/
 CC_FLAGS     = -DUSE_LUFA_CONFIG_HEADER -IConfig/
 LD_FLAGS     = 
 
