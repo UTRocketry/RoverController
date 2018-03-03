@@ -84,9 +84,9 @@ void UTR_GPS_parseGPS(void){
       }
     }
 
-ISR(USART1_RX_vect) {
+ISR(USART1_RX_vect) { //GNGLL for some, GPGLL for others
   cli();
-  loop_until_bit_is_set(UCSR1A, RXC1); /* Wait until data exists. */
+  loop_until_bit_is_set(UCSR1A, RXC1);
   char data = UDR1;
   switch (gpsSM) {
   case 6: //put data into GPS buffer //needs flag to prevent parsing during interrupt
@@ -127,7 +127,7 @@ ISR(USART1_RX_vect) {
     }
     break;
   case 2:
-    if (data == 'P') {
+    if (data == 'N') {
       gpsSM++;
     } else {
       gpsSM = 0;

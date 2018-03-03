@@ -90,7 +90,7 @@ void lufaPrintInt(unsigned int c){
 	char buffer[10] = {};
 	itoa(c, buffer, 10);
 	fputs(buffer, &USBSerialStream);
-	fputs("\n", &USBSerialStream);
+	//fputs("\n", &USBSerialStream);
 }
 
 int main(void) {
@@ -117,6 +117,6 @@ int main(void) {
         fputs(".", & USBSerialStream);
         lufaPrintInt((int)((lonDecimal - (int)(lonDecimal)) * 10000));
         fputs("\n", & USBSerialStream);
-	}
+		}
   }
 }
